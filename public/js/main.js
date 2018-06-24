@@ -1,4 +1,4 @@
-import { PORT, NASA_API_KEY } from '../../browser-env'
+import { PORT, NASA_API_KEY } from '../../env'
 
 if ('serviceWorker' in navigator) {
 

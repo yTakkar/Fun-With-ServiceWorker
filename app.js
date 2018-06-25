@@ -1,6 +1,6 @@
 const
   express = require('express'),
-  { PORT } = require('./browser-env'),
+  { PORT } = require('./env'),
   favicon = require('serve-favicon'),
   { join } = require('path'),
   hbs = require('express-handlebars'),

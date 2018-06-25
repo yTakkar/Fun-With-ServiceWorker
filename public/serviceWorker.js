@@ -9,7 +9,9 @@ let
   ]
 
 /**
- * When SW is installed, we add cacheFiles to cache
+ * When do initial caching here.
+ * When all the files are cached, SW is installed.
+ * This event is activated when user navigates to the page.
  */
 self.addEventListener('install', e => {
   console.log('ServiceWorker Installed!!')
@@ -25,6 +27,7 @@ self.addEventListener('install', e => {
 
 /**
  * When SW is activated, we look for any old cache with cacheName, if there is any, we delete it.
+ * This event is activated when new SW takes control.
  */
 self.addEventListener('activate', e => {
   console.log('ServiceWorker activated!!')
@@ -49,6 +52,7 @@ self.addEventListener('activate', e => {
  * This mechanism is suitable for offline-first apps.
  * Open browser and goto http://localhost:4500, Third party data will be present as expected.
  * No turn off internet connection, you'll see magic.
+ * This event is activated when page is refreshed.
  */
 self.addEventListener('fetch', e => {
 

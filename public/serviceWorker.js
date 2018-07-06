@@ -1,5 +1,5 @@
 let
-  cacheName = 'v1',
+  cacheName = 'v2',
   root = 'http://localhost:4500',
   cacheFiles = [
     `${root}/js/bundle.js`,
@@ -49,45 +49,49 @@ self.addEventListener('activate', e => {
 
 /**
  * When SW is ready to fetch,
- * First we check if any request already has a response in cache, if there is we return the response,
- * else we go ahead and fetch reponse of other requests and put them in cache.
- * This mechanism is suitable for offline-first apps.
  * Open browser and goto http://localhost:4500, Third party data will be present as expected.
  * No turn off internet connection, you'll see magic.
  * This event is activated when page is refreshed.
  */
-self.addEventListener('fetch', function (event) {
+self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
-      .then(function (response) {
-        // Cache hit - return response
-        if (response) return response
-
-        // IMPORTANT: Clone the request. A request is a stream and
-        // can only be consumed once. Since we are consuming this
-        // once by cache and once by the browser for fetch, we need
-        // to clone the response.
-        let fetchRequest = event.request.clone()
-
-        return fetch(fetchRequest).then(response => {
-          // Check if we received a valid response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response
-          }
-
-          // IMPORTANT: Clone the response. A response is a stream
-          // and because we want the browser to consume the response
-          // as well as the cache consuming the response, we need
-          // to clone it so we have two streams.
-          let responseToCache = response.clone()
-
-          caches.open(cacheName)
-            .then(cache => {
-              cache.put(event.request, responseToCache)
-            })
-
-          return response
-        })
-      })
+    fetch(event.request).catch(() => {
+      return caches.match(event.request)
+    })
   )
 })
+
+/**
+ * First we check if any request already has a response in cache, if there is we return the response,
+ * else we go ahead and fetch reponse of other requests and put them in cache.
+ *
+ * NOTE: This mechanism doesn't update new response because it checks if request is in the cache,
+ * if there is, it return the response.
+ */
+
+// self.addEventListener('fetch', function (event) {
+//   event.respondWith(
+//     caches.match(event.request)
+//       .then(function (response) {
+//         // Cache hit - return response
+//         if (response) return response
+//         let fetchRequest = event.request.clone()
+
+//         return fetch(fetchRequest).then(response => {
+//           // Check if we received a valid response
+//           if (!response || response.status !== 200 || response.type !== 'basic') {
+//             return response
+//           }
+
+//           let responseToCache = response.clone()
+
+//           caches.open(cacheName)
+//             .then(cache => {
+//               cache.put(event.request, responseToCache)
+//             })
+
+//           return response
+//         })
+//       })
+//   )
+// })

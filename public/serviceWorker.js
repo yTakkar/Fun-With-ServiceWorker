@@ -1,13 +1,10 @@
 let
-  cacheName = 'v2',
+  cacheName = 'v1',
   root = 'http://localhost:4500',
   cacheFiles = [
     `${root}/js/bundle.js`,
     'https://fonts.googleapis.com/css?family=Open+Sans:400,600,700',
     `${root}/styles/styles.css`,
-    // 'https://api.nasa.gov/planetary/apod?api_key=6lhKe8THkB2ny0LTI4gSKopkMVmFvkiUCjSjl2Cn',
-    // 'https://jsonplaceholder.typicode.com/photos',
-    // 'https://api.github.com/users/yTakkar/repos'
   ]
 
 /**
@@ -68,11 +65,10 @@ self.addEventListener('fetch', event => {
  * NOTE: This mechanism doesn't update new response because it checks if request is in the cache,
  * if there is, it return the response.
  */
-
-// self.addEventListener('fetch', function (event) {
+// self.addEventListener('fetch', event => {
 //   event.respondWith(
 //     caches.match(event.request)
-//       .then(function (response) {
+//       .then(response => {
 //         // Cache hit - return response
 //         if (response) return response
 //         let fetchRequest = event.request.clone()
